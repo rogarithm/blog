@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ko">
+	<head>
+		<meta charset="utf-8">
+		<link rel="stylesheet" href="./css/main.css" type="text/css" media="screen" />
+	</head>
+	<body>
+		<div class="site">
+			<div class="title">
+			</div>
+			<h2> m1 맥에서 터미널 vim 타이핑 속도 개선하기</h2>
+<p>
+  intellij를 쓴 다음	부턴 좀 줄었지만, 여전히 터미널에서 vim을 쓰는 일이 잦다. git 커밋 메시지 편집이나 개인 위키 편집 등 문서 작업을 하거나 루비로 간단한 스크립트 짤 때, 터미널 환경에서 vim으로 작업하는 게 편하기 때문이다.
+</p>
+<p>
+  그전까진 괜찮았는데, 새로 산 m1 맥에서 터미널 vim 속도가 확연히 느렸다. 글자가 입력되는 속도가 타이핑하는 속도를 따라오지 못해서 답답했다. 알아보니 asl 파일을 지우면 괜찮아진다고 해서 지워봤는데, 과연 그랬다.
+</p>
+<p>
+  그렇게 해결이 된 줄 알았는데, 아니었다. 알고 보니 asl 파일은 계속해서 만들어지고, 파일이 쌓이다 보면 또 터미널에서 vim 타이핑 속도가 느려졌다. 그동안은 생각날 때마다 매번 asl 파일 경로를 찾아서 일일이 지웠는데, 생각해보니 이건 수동으로 할 일이 아닌 것 같았다.
+</p>
+<p>
+  
+<br>그래서 자동화하기로 했다. asl 파일을 지우는 스크립트를 만들고, 이걸 crontab에 등록하기로 했다. 스크립트 로직 자체는 아주 단순하다. /private/var/log/asl 경로에 asl 확장자를 갖는 파일이 있으면 지우고, 없으면 아무것도 하지 않는다. 루비로 스크립트를 짰고, 파일(clear_asl.rb) 내용은 이렇다.
+</p>
+<p>
+  has_asl = `ls /private/var/log/asl/*.asl`<br>`sudo rm -rf /private/var/log/asl/*.asl` if has_asl
+</p>
+<p>
+  한시간마다 이 스크립트를 실행하게 하려고 다음과 같이 crontab에 등록했다
+</p>
+<p>
+  * 1 * * * ruby ~/tools/clear_asl.rb
+</p>
+<p>
+  확인해보니 asl 파일이 지워지지 않았다. 위 설정만으로는 crontab이 ruby의 PATH 변수값을 알지 못한다. 대신 ruby가 설치되어 있는 경로를 전부 명시해줘야 crontab이 ruby를 찾을 수 있다. which ruby 명령으로 ruby가 설치된 위치를 알아내서 다음과 같이 고쳤다.
+</p>
+<p>
+  * 1 * * * /Users/gsh/.rbenv/shims/ruby ~/tools/clear_asl.rb
+</p>
+<p>
+  하지만 위에 나온 그대로 crontab에 등록하면 명령을 실행하지 못한다. asl 파일을 지우려면 sudo 권한이 있어야 한다. sudo 명령을 실행하려면 비밀번호를 입력해야 하는데, crontab에 등록한 이벤트가 실행되었을 때 crontab이 비밀번호 입력을 기다리지 않고 바로 실패해버리기 때문이다.
+</p>
+<p>
+  sudo crontab -e 명령으로 root 사용자용 crontab에 등록하면 비밀번호를 입력하지 않아도 된다. 이렇게 등록한 crontab은 root로 실행되기 때문에, 비밀번호 없이도 sudo 권한이 필요한 명령을 실행할 수 있기 때문이다. 또한 clear_asl.rb 에 명시했던 sudo 키워드를 지워도 된다.
+</p>
+<p>
+  * 1 * * * /Users/gsh/.rbenv/shims/ruby ~/tools/clear_asl.rb
+</p>
+<p>
+  이렇게 하면 스크립트를 찾지 못했다면서 실패한다. 왜냐면 현재 사용자는 root인데 스크립트 파일은 다른 사용자(gsh)의 파일 시스템에 있기 때문이다. 따라서 어떤 사용자의 파일 시스템 경로인지를 명시해줘야 한다.
+</p>
+<p>
+  * 1 * * * /Users/gsh/.rbenv/shims/ruby /Users/gsh/tools/clear_asl.rb
+</p>
+<p>
+  
+<br>vim 속도가 느려지고 나서 몇 달간은 TextEdit이나 TextMate 같은 다른 앱으로 옮겨서 문서를 편집해보기도 했다. 쓰면서도 'vim이었으면, 터미널이었으면 이런 건 금방 할 수 있는데' 싶은 순간이 여러 번 있었고, 그래서 위 작업을 했다. 다시 터미널에서 vim으로 문서를 편집해보니 아주 홀가분해졌다. 진작에 해결할 걸 그랬다.
+</p>
+<p>
+  
+<br><strong>참고자료</strong><br>
+</p>
+<ul>
+  <li><a href="https://crontab.guru" target="_blank">https://crontab.guru</a> 여기서 crontab 설정값의 의미를 확인할 수 있다</li>
+  <li><a href="https://askubuntu.com/a/173930" target="_blank">https://askubuntu.com/a/173930</a> root crontab을 설명하는 SO 답변</li>
+</ul>
+<p>
+  <br><br><br><br><br>
+</p>
+
+		</div>
+	</body>
+</html>

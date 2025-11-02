@@ -8,7 +8,7 @@
 		<div class="site">
 			<div class="title">
 			</div>
-			<h2> stash 대신 patch를 써보자</h2>
+			<h1> stash 대신 patch를 써보자</h1>
 <p>
   git으로 버전 관리 하다보면 stash할 일이 종종 생긴다. 이를테면 아직 커밋하기 어려운 변경사항이 있는데 팀원이 한 작업을 pull 해야하는 상황이라던가, 작업하던 도중 다른 브랜치로 체크아웃해야 하는 상황이라던가.
 </p>
@@ -16,12 +16,10 @@
   업무나 사이드 프로젝트를 하면서 stash할 일이 생기면 대부분 stash했던 내용을 금방 다시 적용하기 때문에 별다른 문제가 없었다. 하지만 stash를 만든 시점과 stash를 다시 적용하는 시점 사이에 할 작업이 많을 때는 번거로워지기도 했다. 종종 stash를 다시 적용해야 한다는 걸 잊고 있다가 문제가 터지고 난 다음에야 알아차렸기 때문이다. stash 하나를 만들고 나서 그 stash를 다시 적용하기 전까지 다른 stash를 몇 개 더 만드는 경우도 마찬가지였다. 적용할 stash를 찾으려면 git show stash@{1} 같은 장황한 문법을 써서 각 stash마다 안에 든 내용이 뭐였는지 확인해야 해서 번거로웠다.
 </p>
 <p>
-  
-<br>나는 stash를 쓸만한 상황에 stash 대신 patch 파일을 쓴다. patch 파일 포맷은 diff 포맷과 동일하기 때문에, diff 포맷으로 결과를 출력하는 도구를 써서 patch 파일을 쉽게 만들 수 있다. 따라서 diff 명령어나 git diff 명령어 실행 결과를 파일로 만들고, 파일 확장자를 .patch로 하면 patch 파일로 쓸 수 있다. 소스 코드에 patch 파일 내용을 적용하는 건 git apply로 간단히 할 수 있다.<br><blockquote>$ git diff >> x.patch # git diff의 출력으로 patch 파일 만들기<br>$ git apply <em>foo.patch</em>: # foo.patch 파일 소스 코드에 적용하기</blockquote>
+  나는 stash를 쓸만한 상황에 stash 대신 patch 파일을 쓴다. patch 파일 포맷은 diff 포맷과 동일하기 때문에, diff 포맷으로 결과를 출력하는 도구를 써서 patch 파일을 쉽게 만들 수 있다. 따라서 diff 명령어나 git diff 명령어 실행 결과를 파일로 만들고, 파일 확장자를 .patch로 하면 patch 파일로 쓸 수 있다. 소스 코드에 patch 파일 내용을 적용하는 건 git apply로 간단히 할 수 있다.<br><blockquote>$ git diff >> x.patch # git diff의 출력으로 patch 파일 만들기<br>$ git apply <em>foo.patch</em>: # foo.patch 파일 소스 코드에 적용하기</blockquote>
 </p>
 <p>
-  
-<br>patch 파일을 쓰면서 여러 면에서 stash보다 낫다고 느꼈다.
+  patch 파일을 쓰면서 여러 면에서 stash보다 낫다고 느꼈다.
 </p>
 <p>
   patch는 파일이므로, 왜 만들었는지를 파일명에 명시할 수 있다. 파일명을 적절하게 지으면 파일명만 보고도 어떤 변경 사항을 담는 patch인지 유추하기 편했고, patch 파일을 만들고 시간이 오래 지났더라도 어떤 patch 파일을 적용해야 할지 떠올리기 쉬웠다. 나의 경우, 업무 중 서버 동작을 테스트할 때 개인 기기의 로컬 디렉토리 경로나 포트 번호를 임시로 설정하고 커밋하진 않아야 할 때가 종종 있었다. 이런 변경 사항을 patch 파일로 만들어놓으면 필요할 때마다 빠르게 적용할 수 있어 stash에 비해 쓰기 훨씬 편했다.
@@ -39,8 +37,7 @@
   다른 기기로 옮겨서 작업해야 할 때도 patch 파일을 활용할 수 있었다. 메일로 patch 파일을 보내서 다른 기기에서 작업하는 거다. 물론 git으로 임시 브랜치를 만들어 push해놓고 다른 기기에서 pull해서 쓰는 방법도 있지만, patch 파일을 만들 땐 굳이 add -> commit 과정을 거치지 않아도 되고, 파일명만 t.patch 같이 대충 만들어도 되서 빠르게 만들어서 보내놓을 수 있는 점이 좋았다.
 </p>
 <p>
-  
-<br>구식이긴 하지만, stash 대신 patch를 쓰면서 전보다 생산적으로 작업하고 있다고 느꼈다. 나처럼 커맨드라인에 익숙하고, git의 stash 명령을 쓰기 불편하다고 느끼는 사람이라면 한 번 시도해보기를 추천한다.<br><br><br><br><br><br>
+  구식이긴 하지만, stash 대신 patch를 쓰면서 전보다 생산적으로 작업하고 있다고 느꼈다. 나처럼 커맨드라인에 익숙하고, git의 stash 명령을 쓰기 불편하다고 느끼는 사람이라면 한 번 시도해보기를 추천한다.<br><br><br><br><br><br>
 </p>
 
 		</div>

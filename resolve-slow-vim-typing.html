@@ -8,7 +8,7 @@
 		<div class="site">
 			<div class="title">
 			</div>
-			<h2> m1 맥에서 터미널 vim 타이핑 속도 개선하기</h2>
+			<h1> m1 맥에서 터미널 vim 타이핑 속도 개선하기</h1>
 <p>
   intellij를 쓴 다음	부턴 좀 줄었지만, 여전히 터미널에서 vim을 쓰는 일이 잦다. git 커밋 메시지 편집이나 개인 위키 편집 등 문서 작업을 하거나 루비로 간단한 스크립트 짤 때, 터미널 환경에서 vim으로 작업하는 게 편하기 때문이다.
 </p>
@@ -19,8 +19,7 @@
   그렇게 해결이 된 줄 알았는데, 아니었다. 알고 보니 asl 파일은 계속해서 만들어지고, 파일이 쌓이다 보면 또 터미널에서 vim 타이핑 속도가 느려졌다. 그동안은 생각날 때마다 매번 asl 파일 경로를 찾아서 일일이 지웠는데, 생각해보니 이건 수동으로 할 일이 아닌 것 같았다.
 </p>
 <p>
-  
-<br>그래서 자동화하기로 했다. asl 파일을 지우는 스크립트를 만들고, 이걸 crontab에 등록하기로 했다. 스크립트 로직 자체는 아주 단순하다. /private/var/log/asl 경로에 asl 확장자를 갖는 파일이 있으면 지우고, 없으면 아무것도 하지 않는다. 루비로 스크립트를 짰고, 파일(clear_asl.rb) 내용은 이렇다.
+  그래서 자동화하기로 했다. asl 파일을 지우는 스크립트를 만들고, 이걸 crontab에 등록하기로 했다. 스크립트 로직 자체는 아주 단순하다. /private/var/log/asl 경로에 asl 확장자를 갖는 파일이 있으면 지우고, 없으면 아무것도 하지 않는다. 루비로 스크립트를 짰고, 파일(clear_asl.rb) 내용은 이렇다.
 </p>
 <p>
   has_asl = `ls /private/var/log/asl/*.asl`<br>`sudo rm -rf /private/var/log/asl/*.asl` if has_asl
@@ -53,13 +52,9 @@
   * 1 * * * /Users/gsh/.rbenv/shims/ruby /Users/gsh/tools/clear_asl.rb
 </p>
 <p>
-  
-<br>vim 속도가 느려지고 나서 몇 달간은 TextEdit이나 TextMate 같은 다른 앱으로 옮겨서 문서를 편집해보기도 했다. 쓰면서도 'vim이었으면, 터미널이었으면 이런 건 금방 할 수 있는데' 싶은 순간이 여러 번 있었고, 그래서 위 작업을 했다. 다시 터미널에서 vim으로 문서를 편집해보니 아주 홀가분해졌다. 진작에 해결할 걸 그랬다.
+  vim 속도가 느려지고 나서 몇 달간은 TextEdit이나 TextMate 같은 다른 앱으로 옮겨서 문서를 편집해보기도 했다. 쓰면서도 'vim이었으면, 터미널이었으면 이런 건 금방 할 수 있는데' 싶은 순간이 여러 번 있었고, 그래서 위 작업을 했다. 다시 터미널에서 vim으로 문서를 편집해보니 아주 홀가분해졌다. 진작에 해결할 걸 그랬다.
 </p>
-<p>
-  
-<br><strong>참고자료</strong><br>
-</p>
+<h2> 참고자료</h2>
 <ul>
   <li><a href="https://crontab.guru" target="_blank">https://crontab.guru</a> 여기서 crontab 설정값의 의미를 확인할 수 있다</li>
   <li><a href="https://askubuntu.com/a/173930" target="_blank">https://askubuntu.com/a/173930</a> root crontab을 설명하는 SO 답변</li>
